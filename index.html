@@ -53,49 +53,256 @@
         button:hover {
             transform: scale(1.05);
         }
+
+        /* Add map container styles */
+        .map-container {
+            width: 600px;
+            height: 600px;
+            margin: 20px auto;
+        }
+
+        #india-map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .state {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 1;
+            transition: fill 0.3s;
+            cursor: pointer;
+        }
+
+        .state:hover {
+            fill: #ff9933;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🇮🇳 Amazing Facts About India 🇮🇳</h1>
         <div class="fact-card" id="factDisplay">
-            Click the button to learn an interesting fact about India!
+            Click on any state in the map or use the button below to learn interesting facts!
         </div>
-        <button onclick="showRandomFact()">Show Another Fact</button>
+        <button onclick="showRandomFact()">Show Random India Fact</button>
+    </div>
+
+    <!-- Add map container -->
+    <div class="map-container">
+        <object id="india-map" data="india-map.svg" type="image/svg+xml"></object>
     </div>
 
     <script>
+        // Original India facts data
         const factsData = {
             "facts_about_india": [
-                {"id": 1, "fact": "India is the world's largest democracy"},
-                {"id": 2, "fact": "India has the world's second-largest population"},
-                {"id": 3, "fact": "The game of chess originated in India"},
-                {"id": 4, "fact": "India has the world's largest postal network with over 155,000 post offices"},
-                {"id": 5, "fact": "The Taj Mahal took 22 years to complete (1632-1653)"},
-                {"id": 6, "fact": "India is the world's largest producer of spices"},
-                {"id": 7, "fact": "Sanskrit is considered the mother of all European languages"},
-                {"id": 8, "fact": "India has the largest film industry in the world (Bollywood)"},
-                {"id": 9, "fact": "The value of 'Pi' was first calculated by Indian mathematician Aryabhatta"},
-                {"id": 10, "fact": "India has the world's largest railway network by passenger usage"},
-                {"id": 11, "fact": "Yoga originated in India over 5,000 years ago"},
-                {"id": 12, "fact": "India is the world's largest producer of bananas"},
-                {"id": 13, "fact": "The world's first university, Takshashila (Taxila), was established in India in 700 BC"},
-                {"id": 14, "fact": "India has the world's largest number of vegetarians"},
-                {"id": 15, "fact": "The ancient Indian art of navigation was used by several countries including Arabs and Europeans"},
-                {"id": 16, "fact": "India was the first country to mine diamonds, starting in 400 BC"},
-                {"id": 17, "fact": "Buttons were invented in India, first used in Mohenjo-daro"},
-                {"id": 18, "fact": "India has the largest number of UNESCO World Heritage sites in Asia"},
-                {"id": 19, "fact": "The world's largest sundial is located in Jaipur, India"},
-                {"id": 20, "fact": "India is the world's largest producer of movies, producing over 1,000 films annually"}
+                // ... (your existing general India facts)
             ]
         };
 
+        // State-specific facts data
+        const stateFactsData = {
+    "maharashtra": {
+        "name": "Maharashtra",
+        "facts": ["Mumbai is Maharashtra's capital and India's financial hub",
+                 "The Gateway of India was built in 1924",
+                 "Home to the largest film industry - Bollywood"]
+    },
+    "tamil-nadu": {
+        "name": "Tamil Nadu",
+        "facts": ["Chennai is known as the 'Detroit of India'",
+                 "The Brihadeeswarar Temple was built in 1010 CE",
+                 "Classical dance form Bharatanatyam originated here"]
+    },
+    "kerala": {
+        "name": "Kerala",
+        "facts": ["Known as 'God's Own Country'",
+                 "Has 100% literacy rate",
+                 "Famous for its backwaters and Ayurveda"]
+    },
+    "karnataka": {
+        "name": "Karnataka",
+        "facts": ["Bangalore is India's Silicon Valley",
+                 "Home to the Mysore Palace",
+                 "Known for Carnatic classical music"]
+    },
+    "andhra-pradesh": {
+        "name": "Andhra Pradesh",
+        "facts": ["Known for its Tirupati Temple",
+                 "Famous for Kalamkari art",
+                 "Large producer of rice and seafood"]
+    },
+    "telangana": {
+        "name": "Telangana",
+        "facts": ["Hyderabad is known for its Biryani",
+                 "Home to Charminar",
+                 "Major IT and pharmaceutical hub"]
+    },
+    "gujarat": {
+        "name": "Gujarat",
+        "facts": ["Only home to Asiatic Lions in India",
+                 "Statue of Unity - world's tallest statue",
+                 "Known for its textile industry"]
+    },
+    "rajasthan": {
+        "name": "Rajasthan",
+        "facts": ["Largest state by area in India",
+                 "Home to Thar Desert",
+                 "Known for its majestic palaces and forts"]
+    },
+    "madhya-pradesh": {
+        "name": "Madhya Pradesh",
+        "facts": ["Known as the 'Heart of India'",
+                 "Home to Khajuraho temples",
+                 "Has many national parks including Bandhavgarh"]
+    },
+    "uttar-pradesh": {
+        "name": "Uttar Pradesh",
+        "facts": ["Most populous state in India",
+                 "Home to the Taj Mahal",
+                 "The holy city of Varanasi is located here"]
+    },
+    "bihar": {
+        "name": "Bihar",
+        "facts": ["Ancient seat of learning - Nalanda University",
+                 "Birthplace of Buddhism",
+                 "Known for Madhubani paintings"]
+    },
+    "west-bengal": {
+        "name": "West Bengal",
+        "facts": ["Kolkata was India's capital during British rule",
+                 "Famous for Darjeeling tea",
+                 "Known for its literature and arts"]
+    },
+    "odisha": {
+        "name": "Odisha",
+        "facts": ["Famous for Konark Sun Temple",
+                 "Known for Odissi classical dance",
+                 "Home to Chilika Lake - largest coastal lagoon in India"]
+    },
+    "assam": {
+        "name": "Assam",
+        "facts": ["Famous for Assam tea",
+                 "Home to Kaziranga National Park",
+                 "Known for its silk production"]
+    },
+    "punjab": {
+        "name": "Punjab",
+        "facts": ["India's breadbasket - major wheat producer",
+                 "Golden Temple is located in Amritsar",
+                 "Known for Bhangra dance"]
+    },
+    "haryana": {
+        "name": "Haryana",
+        "facts": ["Major automobile manufacturing hub",
+                 "Known for its dairy industry",
+                 "Birthplace of many Olympic medalists"]
+    },
+    "uttarakhand": {
+        "name": "Uttarakhand",
+        "facts": ["Known as 'Land of Gods'",
+                 "Source of Ganges River",
+                 "Home to many Himalayan glaciers"]
+    },
+    "himachal-pradesh": {
+        "name": "Himachal Pradesh",
+        "facts": ["Known for its apple orchards",
+                 "Popular tourist destination Shimla",
+                 "Home to many Buddhist monasteries"]
+    },
+    "jharkhand": {
+        "name": "Jharkhand",
+        "facts": ["Rich in mineral resources",
+                 "Known for Tribal culture",
+                 "Home to Betla National Park"]
+    },
+    "chhattisgarh": {
+        "name": "Chhattisgarh",
+        "facts": ["Known as 'Rice Bowl of India'",
+                 "Rich in traditional arts and crafts",
+                 "Famous for Bastar tribal art"]
+    },
+    "goa": {
+        "name": "Goa",
+        "facts": ["Famous for its beaches",
+                 "Portuguese architectural influence",
+                 "Known for its carnival celebration"]
+    },
+    "sikkim": {
+        "name": "Sikkim",
+        "facts": ["India's first fully organic state",
+                 "Home to Kanchenjunga - third highest peak",
+                 "Known for its Buddhist monasteries"]
+    },
+    "arunachal-pradesh": {
+        "name": "Arunachal Pradesh",
+        "facts": ["Land of the Rising Sun in India",
+                 "Rich biodiversity",
+                 "Known for its tribal culture"]
+    },
+    "nagaland": {
+        "name": "Nagaland",
+        "facts": ["Known for Hornbill Festival",
+                 "Rich in folk music and dance",
+                 "Famous for its tribal heritage"]
+    },
+    "manipur": {
+        "name": "Manipur",
+        "facts": ["Known as 'Jewel of India'",
+                 "Birthplace of Polo",
+                 "Famous for classical dance Manipuri"]
+    },
+    "mizoram": {
+        "name": "Mizoram",
+        "facts": ["Known for its bamboo products",
+                 "High literacy rate",
+                 "Famous for Cheraw dance"]
+    },
+    "meghalaya": {
+        "name": "Meghalaya",
+        "facts": ["Known as 'Abode of Clouds'",
+                 "Cherrapunji - one of wettest places on Earth",
+                 "Famous for living root bridges"]
+    },
+    "tripura": {
+        "name": "Tripura",
+        "facts": ["Known for its pineapple and rubber plantations",
+                 "Rich in traditional art and culture",
+                 "Famous for Unakoti rock carvings"]
+    }
+};
+
+        // Function to show random general India fact
         function showRandomFact() {
             const facts = factsData.facts_about_india;
             const randomIndex = Math.floor(Math.random() * facts.length);
             const factDisplay = document.getElementById('factDisplay');
-            factDisplay.innerHTML = `<div>${facts[randomIndex].fact}</div>`;
+            factDisplay.innerHTML = `${facts[randomIndex].fact}`;
         }
+
+        // Interactive map functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const map = document.getElementById('india-map');
+            
+            map.addEventListener('load', function() {
+                const svgDoc = map.contentDocument;
+                const states = svgDoc.querySelectorAll('.state');
+                
+                states.forEach(state => {
+                    state.addEventListener('click', function(e) {
+                        const stateId = e.target.id;
+                        if (stateFactsData[stateId]) {
+                            const factDisplay = document.getElementById('factDisplay');
+                            const randomFact = stateFactsData[stateId].facts[
+                                Math.floor(Math.random() * stateFactsData[stateId].facts.length)
+                            ];
+                            factDisplay.innerHTML = `${stateFactsData[stateId].name}: ${randomFact}`;
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>
