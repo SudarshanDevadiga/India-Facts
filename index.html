@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Facts About India</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9933, #ffffff, #138808);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #000080;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .fact-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        button {
+            background-color: #000080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇮🇳 Amazing Facts About India 🇮🇳</h1>
+        <div class="fact-card" id="factDisplay">
+            Click the button to learn an interesting fact about India!
+        </div>
+        <button onclick="showRandomFact()">Show Another Fact</button>
+    </div>
+
+    <script>
+        const factsData = {
+            "facts_about_india": [
+                {"id": 1, "fact": "India is the world's largest democracy"},
+                {"id": 2, "fact": "India has the world's second-largest population"},
+                {"id": 3, "fact": "The game of chess originated in India"},
+                {"id": 4, "fact": "India has the world's largest postal network with over 155,000 post offices"},
+                {"id": 5, "fact": "The Taj Mahal took 22 years to complete (1632-1653)"},
+                {"id": 6, "fact": "India is the world's largest producer of spices"},
+                {"id": 7, "fact": "Sanskrit is considered the mother of all European languages"},
+                {"id": 8, "fact": "India has the largest film industry in the world (Bollywood)"},
+                {"id": 9, "fact": "The value of 'Pi' was first calculated by Indian mathematician Aryabhatta"},
+                {"id": 10, "fact": "India has the world's largest railway network by passenger usage"},
+                {"id": 11, "fact": "Yoga originated in India over 5,000 years ago"},
+                {"id": 12, "fact": "India is the world's largest producer of bananas"},
+                {"id": 13, "fact": "The world's first university, Takshashila (Taxila), was established in India in 700 BC"},
+                {"id": 14, "fact": "India has the world's largest number of vegetarians"},
+                {"id": 15, "fact": "The ancient Indian art of navigation was used by several countries including Arabs and Europeans"},
+                {"id": 16, "fact": "India was the first country to mine diamonds, starting in 400 BC"},
+                {"id": 17, "fact": "Buttons were invented in India, first used in Mohenjo-daro"},
+                {"id": 18, "fact": "India has the largest number of UNESCO World Heritage sites in Asia"},
+                {"id": 19, "fact": "The world's largest sundial is located in Jaipur, India"},
+                {"id": 20, "fact": "India is the world's largest producer of movies, producing over 1,000 films annually"}
+            ]
+        };
+
+        function showRandomFact() {
+            const facts = factsData.facts_about_india;
+            const randomIndex = Math.floor(Math.random() * facts.length);
+            const factDisplay = document.getElementById('factDisplay');
+            factDisplay.innerHTML = `<div>${facts[randomIndex].fact}</div>`;
+        }
+    </script>
+</body>
+</html>
